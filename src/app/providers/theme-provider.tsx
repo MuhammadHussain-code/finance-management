@@ -203,7 +203,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   const setPalette = useCallback(
     (palette: PaletteName) => {
-      const newPrefs = { ...preferences, palette };
+      const newPrefs = { ...preferences, palette, customColors: null };
       setPreferences(newPrefs);
       persistPreferences(newPrefs);
     },

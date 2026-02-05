@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, type ReactNode } from "react";
 import {
   PieChart,
   Pie,
@@ -17,6 +17,9 @@ interface AssetAllocationChartProps {
   data: AssetAllocationDataPoint[];
   className?: string;
   height?: number;
+  title?: string;
+  description?: string;
+  emptyState?: ReactNode;
 }
 
 // Custom tooltip component - defined outside to avoid recreation during render
@@ -92,24 +95,30 @@ export const AssetAllocationChart = memo(function AssetAllocationChart({
   data,
   className,
   height = 250,
+  title,
+  description,
+  emptyState,
 }: AssetAllocationChartProps) {
   const isEmpty = data.length === 0;
+  const resolvedTitle = title ?? "Asset allocation";
+  const resolvedDescription = description ?? "Portfolio composition by category";
+  const resolvedEmptyState = emptyState ?? (
+    <div className="text-muted-foreground">
+      <p className="text-sm">No allocation data yet</p>
+      <p className="mt-1 text-xs">
+        Add investments with current prices to see allocation
+      </p>
+    </div>
+  );
 
   return (
     <ChartContainer
-      title="Asset allocation"
-      description="Portfolio composition by category"
+      title={resolvedTitle}
+      description={resolvedDescription}
       className={className}
       height={height}
       isEmpty={isEmpty}
-      emptyState={
-        <div className="text-muted-foreground">
-          <p className="text-sm">No allocation data yet</p>
-          <p className="mt-1 text-xs">
-            Add investments with current prices to see allocation
-          </p>
-        </div>
-      }
+      emptyState={resolvedEmptyState}
     >
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>

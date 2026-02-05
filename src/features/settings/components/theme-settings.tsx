@@ -153,7 +153,6 @@ export function ThemeSettings() {
               isSelected={preferences.palette === palette.id && !preferences.customColors}
               onSelect={() => {
                 setPalette(palette.id as PaletteName);
-                setCustomColors(null); // Clear custom colors when selecting preset
               }}
             />
           ))}

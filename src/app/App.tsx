@@ -8,15 +8,15 @@ import { router } from "@/app/routes";
 
 export function App() {
   return (
-    <QueryProvider>
-      <AuthProvider>
-        <ThemeProvider>
-          <ErrorBoundary>
+    <ErrorBoundary>
+      <QueryProvider>
+        <AuthProvider>
+          <ThemeProvider>
             <RouterProvider router={router} />
             <Toaster />
-          </ErrorBoundary>
-        </ThemeProvider>
-      </AuthProvider>
-    </QueryProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </QueryProvider>
+    </ErrorBoundary>
   );
 }

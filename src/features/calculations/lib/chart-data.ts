@@ -227,6 +227,57 @@ export interface AssetAllocationDataPoint {
 }
 
 /**
+ * Calculates investment allocation by asset using invested amounts.
+ */
+export function calculateInvestmentsByAssetData(
+  assets: Asset[],
+  investments: Investment[],
+): AssetAllocationDataPoint[] {
+  if (assets.length === 0 || investments.length === 0) return [];
+
+  const assetById = assets.reduce<Record<string, Asset>>((acc, asset) => {
+    acc[asset.id] = asset;
+    return acc;
+  }, {});
+
+  const totalsByAsset = new Map<string, number>();
+  for (const inv of investments) {
+    totalsByAsset.set(inv.asset_id, (totalsByAsset.get(inv.asset_id) ?? 0) + inv.amount);
+  }
+
+  const totalInvested = Array.from(totalsByAsset.values()).reduce(
+    (sum, value) => sum + value,
+    0,
+  );
+  if (totalInvested === 0) return [];
+
+  const colorArray = [
+    chartColors.value,
+    chartColors.accent2,
+    chartColors.accent1,
+    chartColors.accent3,
+    chartColors.accent4,
+    chartColors.accent5,
+  ];
+
+  const entries = Array.from(totalsByAsset.entries())
+    .map(([assetId, value]) => ({ assetId, value }))
+    .sort((a, b) => b.value - a.value);
+
+  return entries.map((entry, index) => {
+    const asset = assetById[entry.assetId];
+    const value = Math.round(entry.value * 100) / 100;
+    return {
+      category: entry.assetId,
+      categoryLabel: asset?.name ?? "Unknown asset",
+      value,
+      percentage: Math.round((value / totalInvested) * 1000) / 10,
+      color: colorArray[index % colorArray.length],
+    };
+  });
+}
+
+/**
  * Calculates asset allocation breakdown by category.
  */
 export function calculateAssetAllocationData(
