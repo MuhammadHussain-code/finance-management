@@ -3,7 +3,7 @@ export function formatCurrency(
   currency?: string | null,
   locale: string = "en-IN",
 ) {
-  const normalizedCurrency = (currency ?? "INR").trim();
+  const normalizedCurrency = (currency ?? "Rs").trim();
   if (!normalizedCurrency) {
     return new Intl.NumberFormat(locale, {
       maximumFractionDigits: 2,

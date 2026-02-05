@@ -12,7 +12,7 @@ export function PortfolioSummary({
   totalUnits,
 }: PortfolioSummaryProps) {
   return (
-    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-primary/20">
+    <Card className="bg-linear-to-br from-card via-card to-primary/5 border-primary/20">
       <CardHeader className="pb-2">
         <CardTitle className="text-xl">Portfolio summary</CardTitle>
       </CardHeader>

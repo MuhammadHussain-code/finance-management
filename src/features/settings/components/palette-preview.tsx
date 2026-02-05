@@ -120,7 +120,7 @@ function MiniUIPreview({ colors }: { colors: PaletteColors }) {
             className="font-semibold text-xs"
             style={{ color: colors.chartValue }}
           >
-            ₹1.2L
+            Rs. 1.2L
           </div>
         </div>
         <div>
