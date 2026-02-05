@@ -7,9 +7,8 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { AssetForm } from "@/features/assets/components/asset-form";
 import { AssetList } from "@/features/assets/components/asset-list";
 import { useAssets } from "@/features/assets/hooks/use-assets";
-import { useLatestPrices } from "@/features/assets/hooks/use-asset-prices";
 import { useInvestments } from "@/features/investments/hooks/use-investments";
-import { calculateReturnMetrics } from "@/features/calculations/lib/returns";
+import { getTotalUnits } from "@/features/calculations/lib/investment-units";
 import { toast } from "@/components/ui/toast";
 
 export function AssetsPage() {
@@ -17,11 +16,9 @@ export function AssetsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const assetsQuery = useAssets(user?.id);
   const investmentsQuery = useInvestments(user?.id);
-  const latestPricesQuery = useLatestPrices(user?.id);
 
   const metricsByAssetId = useMemo(() => {
     const investments = investmentsQuery.data ?? [];
-    const latestPrices = latestPricesQuery.data ?? {};
     const investmentsByAsset = investments.reduce<Record<string, typeof investments>>(
       (acc, investment) => {
         acc[investment.asset_id] = acc[investment.asset_id]
@@ -32,25 +29,21 @@ export function AssetsPage() {
       {},
     );
 
-    const metrics: Record<
-      string,
-      { totalInvested: number; currentValue: number; returnPercentage: number | null }
-    > = {};
+    const metrics: Record<string, { totalInvested: number; totalUnits: number }> = {};
 
     Object.entries(investmentsByAsset).forEach(([assetId, assetInvestments]) => {
-      const latestPrice = latestPrices[assetId]?.price;
-      const result = calculateReturnMetrics(assetInvestments, latestPrice);
+      const totalInvested = assetInvestments.reduce((sum, inv) => sum + inv.amount, 0);
+      const totalUnits = getTotalUnits(assetInvestments);
       metrics[assetId] = {
-        totalInvested: result.totalInvested,
-        currentValue: result.currentValue,
-        returnPercentage: result.returnPercentage,
+        totalInvested,
+        totalUnits,
       };
     });
 
     return metrics;
-  }, [investmentsQuery.data, latestPricesQuery.data]);
+  }, [investmentsQuery.data]);
 
-  if (assetsQuery.isLoading || investmentsQuery.isLoading || latestPricesQuery.isLoading) {
+  if (assetsQuery.isLoading || investmentsQuery.isLoading) {
     return <LoadingSpinner label="Loading assets" />;
   }
 

@@ -8,21 +8,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
-import { InvestmentSummary } from "@/features/investments/components/investment-summary";
 import { MonthlyBreakdown } from "@/features/investments/components/monthly-breakdown";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useInvestments } from "@/features/investments/hooks/use-investments";
 import { useAssetPrices } from "@/features/assets/hooks/use-asset-prices";
 import { PriceUpdateForm } from "@/features/assets/components/price-update-form";
-import { usePortfolioMetrics } from "@/features/calculations/hooks/use-portfolio-metrics";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAssetById } from "@/features/assets/api/assets-api";
-import { formatCurrency } from "@/lib/utils/format";
+import { CurrencyDisplay } from "@/components/shared/currency-display";
+import { formatCurrency, formatNumber } from "@/lib/utils/format";
 import { formatShortDate } from "@/lib/utils/date";
 import { AssetForm } from "@/features/assets/components/asset-form";
 import { useAssets } from "@/features/assets/hooks/use-assets";
 import { toast } from "@/components/ui/toast";
+import { getTotalUnits } from "@/features/calculations/lib/investment-units";
 
 export function AssetDetailPage() {
   const navigate = useNavigate();
@@ -46,7 +48,18 @@ export function AssetDetailPage() {
 
   const latestPrice = pricesQuery.data?.[0]?.price;
   const latestPriceDate = pricesQuery.data?.[0]?.price_date;
-  const metrics = usePortfolioMetrics(assetInvestments, latestPrice);
+  const totalInvested = useMemo(
+    () => assetInvestments.reduce((sum, investment) => sum + investment.amount, 0),
+    [assetInvestments],
+  );
+  const totalUnits = useMemo(() => getTotalUnits(assetInvestments), [assetInvestments]);
+  const [currentValueInput, setCurrentValueInput] = useState("");
+  const parsedCurrentValue = Number(currentValueInput);
+  const hasCurrentValue =
+    currentValueInput.trim() !== "" && Number.isFinite(parsedCurrentValue) && parsedCurrentValue >= 0;
+  const pnl = hasCurrentValue ? parsedCurrentValue - totalInvested : null;
+  const pnlPercent =
+    hasCurrentValue && totalInvested > 0 ? (pnl ?? 0) / totalInvested * 100 : null;
 
   if (assetQuery.isLoading || investmentsQuery.isLoading || pricesQuery.isLoading) {
     return <LoadingSpinner label="Loading asset" />;
@@ -173,13 +186,64 @@ export function AssetDetailPage() {
         </div>
       </div>
 
-      <InvestmentSummary
-        totalInvested={metrics.totalInvested}
-        currentValue={metrics.currentValue}
-        absoluteReturn={metrics.absoluteReturn}
-        returnPercentage={metrics.returnPercentage}
-        xirr={metrics.xirr}
-      />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Investment totals</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4 text-sm sm:grid-cols-2">
+            <div>
+              <div className="text-muted-foreground">Total invested</div>
+              <div className="text-lg font-semibold">
+                <CurrencyDisplay value={totalInvested} />
+              </div>
+            </div>
+            <div>
+              <div className="text-muted-foreground">Total units</div>
+              <div className="text-lg font-semibold">{formatNumber(totalUnits, 4)}</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>PnL (on demand)</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4 text-sm">
+            <div className="space-y-2">
+              <label htmlFor="current_value" className="text-muted-foreground">
+                Current value of your holdings
+              </label>
+              <Input
+                id="current_value"
+                name="current_value"
+                type="number"
+                step="0.01"
+                min="0"
+                value={currentValueInput}
+                onChange={(event) => setCurrentValueInput(event.target.value)}
+                placeholder="Enter current value"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground">PnL</div>
+              <div
+                className={`text-lg font-semibold ${
+                  pnl === null ? "" : pnl >= 0 ? "text-positive" : "text-negative"
+                }`}
+              >
+                {pnl === null ? "—" : <CurrencyDisplay value={pnl} />}
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground">PnL %</div>
+              <div className="text-lg font-semibold">
+                {pnlPercent === null ? "—" : `${formatNumber(pnlPercent)}%`}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {assetInvestments.length ? (
         <div className="space-y-3">

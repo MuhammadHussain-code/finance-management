@@ -1,23 +1,20 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from "@/lib/utils/format";
+import { formatCurrency, formatNumber } from "@/lib/utils/format";
 import type { Asset } from "@/features/assets/types";
 
 interface AssetCardProps {
   asset: Asset;
-  currentValue?: number;
   totalInvested?: number;
-  returnPercentage?: number | null;
+  totalUnits?: number;
 }
 
 export function AssetCard({
   asset,
-  currentValue = 0,
   totalInvested = 0,
-  returnPercentage,
+  totalUnits = 0,
 }: AssetCardProps) {
-  const isPositive = (returnPercentage ?? 0) >= 0;
   return (
     <Link to={`/assets/${asset.id}`} className="block cursor-pointer">
       <Card className="transition-all duration-200 hover:border-primary/50 hover:shadow-md group">
@@ -33,14 +30,8 @@ export function AssetCard({
             <div className="font-semibold text-foreground">{formatCurrency(totalInvested)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Current</div>
-            <div className="font-semibold text-foreground">{formatCurrency(currentValue)}</div>
-            {returnPercentage != null ? (
-              <div className={`text-sm font-bold ${isPositive ? "text-positive" : "text-negative"}`}>
-                {isPositive ? "+" : ""}
-                {returnPercentage.toFixed(2)}%
-              </div>
-            ) : null}
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">Units</div>
+            <div className="font-semibold text-foreground">{formatNumber(totalUnits, 4)}</div>
           </div>
         </CardContent>
       </Card>
