@@ -7,14 +7,14 @@ import { router } from "@/app/routes";
 
 export function App() {
   return (
-    <ThemeProvider>
-      <QueryProvider>
-        <AuthProvider>
+    <QueryProvider>
+      <AuthProvider>
+        <ThemeProvider>
           <ErrorBoundary>
             <RouterProvider router={router} />
           </ErrorBoundary>
-        </AuthProvider>
-      </QueryProvider>
-    </ThemeProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryProvider>
   );
 }

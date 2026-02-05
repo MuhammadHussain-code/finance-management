@@ -38,7 +38,7 @@ export function InvestmentSummary({
         </div>
         <div>
           <div className="text-muted-foreground">Absolute returns</div>
-          <div className={`text-lg font-semibold ${isPositive ? "text-emerald-600" : "text-rose-600"}`}>
+          <div className={`text-lg font-semibold ${isPositive ? "text-positive" : "text-negative"}`}>
             <CurrencyDisplay value={absoluteReturn} />
           </div>
         </div>

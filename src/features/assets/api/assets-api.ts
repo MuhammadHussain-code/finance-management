@@ -65,7 +65,10 @@ export async function fetchAssetPrices(assetId: string) {
 export async function createAssetPrice(payload: AssetPriceInsert) {
   const { data, error } = await supabase
     .from("price_history")
-    .insert(payload)
+    .upsert(payload, {
+      onConflict: "asset_id,price_date",
+      ignoreDuplicates: false,
+    })
     .select("*")
     .single();
   if (error) throw error;

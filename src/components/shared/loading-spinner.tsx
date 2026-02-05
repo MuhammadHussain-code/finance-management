@@ -8,9 +8,9 @@ interface LoadingSpinnerProps {
 
 export function LoadingSpinner({ className, label = "Loading" }: LoadingSpinnerProps) {
   return (
-    <div className={cn("flex items-center gap-2 text-sm text-muted-foreground", className)}>
-      <Loader2 className="h-4 w-4 animate-spin" />
-      <span>{label}</span>
+    <div className={cn("flex items-center gap-3 text-sm text-muted-foreground", className)}>
+      <Loader2 className="h-5 w-5 animate-spin text-primary" />
+      <span className="font-medium">{label}</span>
     </div>
   );
 }

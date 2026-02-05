@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
+import { Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,22 +45,55 @@ export function LoginForm() {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-5" onSubmit={handleSubmit}>
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" required placeholder="you@example.com" />
+        <Input 
+          id="email" 
+          name="email" 
+          type="email" 
+          required 
+          placeholder="you@example.com"
+          autoComplete="email"
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
-        <Input id="password" name="password" type="password" required />
+        <Input 
+          id="password" 
+          name="password" 
+          type="password" 
+          required 
+          placeholder="Enter your password"
+          autoComplete={isRegistering ? "new-password" : "current-password"}
+        />
       </div>
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      {error ? (
+        <p className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-lg border border-destructive/20">
+          {error}
+        </p>
+      ) : null}
       <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isRegistering ? "Create account" : "Sign in"}
+        {isSubmitting ? (
+          <>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            {isRegistering ? "Creating account..." : "Signing in..."}
+          </>
+        ) : (
+          isRegistering ? "Create account" : "Sign in"
+        )}
       </Button>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-card px-2 text-muted-foreground">or</span>
+        </div>
+      </div>
       <button
         type="button"
-        className="w-full text-sm text-muted-foreground underline-offset-4 hover:underline"
+        className="w-full text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer"
         onClick={() => setIsRegistering((prev) => !prev)}
       >
         {isRegistering ? "Already have an account? Sign in" : "New here? Create an account"}

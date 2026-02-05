@@ -7,6 +7,7 @@ import { AssetDetailPage } from "@/pages/assets/asset-detail";
 import { InvestmentsPage } from "@/pages/investments";
 import { NewInvestmentPage } from "@/pages/investments/new";
 import { SipCalculatorPage } from "@/pages/sip-calculator";
+import { SettingsPage } from "@/pages/settings";
 import { LoginPage } from "@/pages/login";
 import { NotFoundPage } from "@/pages/not-found";
 
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: "investments", element: <InvestmentsPage /> },
       { path: "investments/new", element: <NewInvestmentPage /> },
       { path: "sip-calculator", element: <SipCalculatorPage /> },
+      { path: "settings", element: <SettingsPage /> },
     ],
   },
   { path: "/login", element: <LoginPage /> },

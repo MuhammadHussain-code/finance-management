@@ -4,12 +4,45 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#2E7AB8" />
     <meta
       name="description"
       content="Personal SIP tracker for manual investment logging and performance insights."
     />
     <title>SIP Tracker</title>
+    <!-- Anti-flash: Apply theme before React hydrates -->
+    <script>
+      (function() {
+        var STORAGE_KEY = 'sip-tracker-theme';
+        var defaultPrefs = { mode: 'system', palette: 'finance-calm' };
+        
+        try {
+          var stored = localStorage.getItem(STORAGE_KEY);
+          var prefs = stored ? JSON.parse(stored) : defaultPrefs;
+          var mode = prefs.mode || 'system';
+          
+          // Resolve system preference
+          if (mode === 'system') {
+            mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          
+          // Apply dark class immediately
+          if (mode === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+          }
+          
+          // Set data attribute for palette (can be used for additional styling)
+          document.documentElement.dataset.palette = prefs.palette || 'finance-calm';
+        } catch (e) {
+          // Fallback to light mode on error
+          document.documentElement.style.colorScheme = 'light';
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

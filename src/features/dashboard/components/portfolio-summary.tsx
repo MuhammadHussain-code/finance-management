@@ -17,29 +17,30 @@ export function PortfolioSummary({
 }: PortfolioSummaryProps) {
   const isPositive = absoluteReturn >= 0;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Portfolio summary</CardTitle>
+    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-primary/20">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl">Portfolio summary</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <div className="text-sm text-muted-foreground">Total invested</div>
-          <div className="text-2xl font-semibold">
+      <CardContent className="grid gap-6 sm:grid-cols-3">
+        <div className="space-y-1">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">Total invested</div>
+          <div className="text-2xl font-bold tracking-tight">
             <CurrencyDisplay value={totalInvested} />
           </div>
         </div>
-        <div>
-          <div className="text-sm text-muted-foreground">Current value</div>
-          <div className="text-2xl font-semibold">
+        <div className="space-y-1">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">Current value</div>
+          <div className="text-2xl font-bold tracking-tight text-primary">
             <CurrencyDisplay value={currentValue} />
           </div>
         </div>
-        <div className="flex items-baseline justify-between">
-          <div className="text-sm text-muted-foreground">Returns</div>
-          <div className={`text-lg font-semibold ${isPositive ? "text-emerald-600" : "text-rose-600"}`}>
-            <CurrencyDisplay value={absoluteReturn} />{" "}
+        <div className="space-y-1">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">Returns</div>
+          <div className={`text-2xl font-bold tracking-tight ${isPositive ? "text-positive" : "text-negative"}`}>
+            {isPositive ? "+" : ""}
+            <CurrencyDisplay value={absoluteReturn} />
             {returnPercentage !== null ? (
-              <span className="text-sm font-medium">
+              <span className="text-sm font-semibold ml-1.5">
                 ({isPositive ? "+" : ""}
                 {formatNumber(returnPercentage)}%)
               </span>

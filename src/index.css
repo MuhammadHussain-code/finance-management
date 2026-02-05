@@ -8,98 +8,193 @@
 }
 
 @layer base {
+  /* ============================================================
+   * FINANCE CALM - Default Light Theme
+   * Trustworthy blues and soft teals for focused financial tracking
+   * ============================================================ */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    /* Core semantic colors */
+    --primary: 210 65% 45%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 165 45% 40%;
+    --accent-foreground: 0 0% 100%;
 
+    /* Surface colors */
+    --background: 220 15% 97%;
+    --foreground: 220 25% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
-
+    --card-foreground: 220 25% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --popover-foreground: 220 25% 10%;
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 10% 45%;
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 25% 15%;
 
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    /* Interactive states */
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 210 65% 45%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Semantic colors */
+    --destructive: 0 55% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-
+    /* Radius */
     --radius: 0.75rem;
 
-    /* Chart color tokens (finance-grade, colorblind-safe) */
-    --chart-invested: #94a3b8;
-    --chart-value: #6366f1;
-    --chart-positive: #22c55e;
-    --chart-negative: #ef4444;
-    --chart-muted: #e5e7eb;
-    --chart-accent-1: #8b5cf6;
-    --chart-accent-2: #06b6d4;
-    --chart-accent-3: #f59e0b;
-    --chart-accent-4: #ec4899;
-    --chart-accent-5: #14b8a6;
+    /* Chart colors - finance-appropriate */
+    --chart-invested: #6B7A8C;
+    --chart-value: #2E7AB8;
+    --chart-positive: #3D9970;
+    --chart-negative: #CC5A5A;
+    --chart-muted: #9CA3AF;
+    --chart-accent-1: #2E7AB8;
+    --chart-accent-2: #3D9970;
+    --chart-accent-3: #D4A76A;
+    --chart-accent-4: #8B6CB0;
+    --chart-accent-5: #5B8A8A;
   }
 
+  /* ============================================================
+   * FINANCE CALM - Dark Theme
+   * ============================================================ */
   .dark {
-    --background: 222.2 47.4% 11.2%;
-    --foreground: 210 40% 98%;
+    color-scheme: dark;
 
-    --card: 222.2 47.4% 11.2%;
-    --card-foreground: 210 40% 98%;
+    /* Core semantic colors */
+    --primary: 210 55% 55%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 165 40% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 210 40% 98%;
+    /* Surface colors */
+    --background: 220 20% 10%;
+    --foreground: 220 10% 95%;
+    --card: 220 18% 13%;
+    --card-foreground: 220 10% 95%;
+    --popover: 220 18% 15%;
+    --popover-foreground: 220 10% 95%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 60%;
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 220 10% 90%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Interactive states */
+    --border: 220 15% 22%;
+    --input: 220 15% 18%;
+    --ring: 210 55% 55%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Semantic colors */
+    --destructive: 0 50% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-
-    /* Chart color tokens (dark mode) */
-    --chart-invested: #64748b;
-    --chart-value: #818cf8;
-    --chart-positive: #4ade80;
-    --chart-negative: #f87171;
-    --chart-muted: #374151;
-    --chart-accent-1: #a78bfa;
-    --chart-accent-2: #22d3ee;
-    --chart-accent-3: #fbbf24;
-    --chart-accent-4: #f472b6;
-    --chart-accent-5: #2dd4bf;
+    /* Chart colors - adjusted for dark mode */
+    --chart-invested: #7B8A9C;
+    --chart-value: #4A9AD8;
+    --chart-positive: #4DB380;
+    --chart-negative: #E06B6B;
+    --chart-muted: #4B5563;
+    --chart-accent-1: #4A9AD8;
+    --chart-accent-2: #4DB380;
+    --chart-accent-3: #E4B77A;
+    --chart-accent-4: #9B7CC0;
+    --chart-accent-5: #6B9A9A;
   }
 
+  /* Border color default */
   * {
     border-color: hsl(var(--border));
   }
 
+  /* Body styles */
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     min-height: 100vh;
+  }
+
+  /* Custom scrollbar - subtle and clean */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+/* ============================================================
+ * UTILITY CLASSES
+ * ============================================================ */
+@layer utilities {
+  /* Subtle card hover effect */
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+
+  .card-hover:hover {
+    @apply shadow-md;
+    transform: translateY(-1px);
+  }
+
+  /* Focus ring utility */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Positive/negative text colors for financial data */
+  .text-positive {
+    color: var(--chart-positive);
+  }
+
+  .text-negative {
+    color: var(--chart-negative);
+  }
+
+  /* Glass effect for overlays */
+  .glass-effect {
+    @apply bg-background/80 backdrop-blur-md;
+  }
+}
+
+/* ============================================================
+ * ANIMATIONS
+ * ============================================================ */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

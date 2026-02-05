@@ -17,7 +17,10 @@ export function useAssetPrices(assetId?: string) {
   const createPrice = useMutation({
     mutationFn: createAssetPrice,
     onSuccess: () => {
+      // Invalidate the specific asset's price history
       queryClient.invalidateQueries({ queryKey: ["prices", assetId] });
+      // Also invalidate latest-prices used by dashboard and asset list
+      queryClient.invalidateQueries({ queryKey: ["latest-prices"] });
     },
   });
 

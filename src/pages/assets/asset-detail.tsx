@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Dialog,
@@ -28,6 +28,7 @@ export function AssetDetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const [isPriceDialogOpen, setIsPriceDialogOpen] = useState(false);
   const assetQuery = useQuery({
     queryKey: ["asset", id],
     queryFn: () => fetchAssetById(id ?? ""),
@@ -56,13 +57,20 @@ export function AssetDetailPage() {
 
   const handlePriceSubmit = (values: { price: number; price_date: string }) => {
     if (!user || !id) return;
-    pricesQuery.createPrice.mutate({
-      asset_id: id,
-      user_id: user.id,
-      price: values.price,
-      price_date: values.price_date,
-      source: "manual",
-    });
+    pricesQuery.createPrice.mutate(
+      {
+        asset_id: id,
+        user_id: user.id,
+        price: values.price,
+        price_date: values.price_date,
+        source: "manual",
+      },
+      {
+        onSuccess: () => {
+          setIsPriceDialogOpen(false);
+        },
+      }
+    );
   };
 
   const handleAssetUpdate = (values: {
@@ -109,7 +117,7 @@ export function AssetDetailPage() {
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Dialog>
+            <Dialog open={isPriceDialogOpen} onOpenChange={setIsPriceDialogOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline">Update price</Button>
               </DialogTrigger>

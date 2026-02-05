@@ -10,6 +10,14 @@ export interface SipResult {
   finalCorpus: number;
 }
 
+/** Maximum safe value for calculations to prevent overflow */
+const MAX_SAFE_VALUE = Number.MAX_SAFE_INTEGER;
+
+/**
+ * Calculates SIP (Systematic Investment Plan) projections
+ * @param input - SIP parameters including monthly investment, duration, and expected return
+ * @returns Calculated total invested, estimated returns, and final corpus
+ */
 export function calculateSip(input: SipInput): SipResult {
   const { monthlyInvestment, durationMonths, expectedAnnualReturn } = input;
   const monthlyRate = expectedAnnualReturn / 12;
@@ -22,8 +30,9 @@ export function calculateSip(input: SipInput): SipResult {
     };
   }
 
+  const totalInvested = monthlyInvestment * durationMonths;
+
   if (monthlyRate === 0) {
-    const totalInvested = monthlyInvestment * durationMonths;
     return {
       totalInvested,
       estimatedReturns: 0,
@@ -36,7 +45,14 @@ export function calculateSip(input: SipInput): SipResult {
     ((Math.pow(1 + monthlyRate, durationMonths) - 1) / monthlyRate) *
     (1 + monthlyRate);
 
-  const totalInvested = monthlyInvestment * durationMonths;
+  // Guard against overflow or invalid calculations
+  if (!Number.isFinite(futureValue) || futureValue > MAX_SAFE_VALUE) {
+    return {
+      totalInvested: Math.min(totalInvested, MAX_SAFE_VALUE),
+      estimatedReturns: MAX_SAFE_VALUE - Math.min(totalInvested, MAX_SAFE_VALUE),
+      finalCorpus: MAX_SAFE_VALUE,
+    };
+  }
 
   return {
     totalInvested,

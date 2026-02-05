@@ -3,9 +3,27 @@ create table public.profiles (
   id uuid references auth.users(id) on delete cascade primary key,
   display_name text,
   currency text default 'INR',
+  theme_preferences jsonb default '{"mode": "system", "palette": "finance-calm", "customColors": null}'::jsonb,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+-- Auto-create profile on user signup
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = ''
+as $$
+begin
+  insert into public.profiles (id)
+  values (new.id);
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
 
 -- Asset Categories (enum-like reference table)
 create table public.asset_categories (

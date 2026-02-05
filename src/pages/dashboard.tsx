@@ -192,15 +192,15 @@ export function DashboardPage() {
       )}
 
       {/* Assets List */}
-      <div className="space-y-3">
-        <h2 className="text-lg font-semibold">Your assets</h2>
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold tracking-tight">Your assets</h2>
         <AssetList assets={assetsQuery.data ?? []} metricsByAssetId={metricsByAssetId} />
       </div>
 
       {/* Recent Investments */}
       {hasInvestments && (
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold">Recent investments</h2>
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold tracking-tight">Recent investments</h2>
           <RecentInvestments
             investments={investmentsQuery.data ?? []}
             assetsById={assetsById}

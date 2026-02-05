@@ -6,6 +6,44 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
+/**
+ * Theme mode options
+ */
+export type ThemeMode = "light" | "dark" | "system";
+
+/**
+ * Available preset palette names
+ */
+export type PaletteName = "finance-calm" | "neutral" | "soft-green" | "warm" | "custom";
+
+/**
+ * Custom color overrides for advanced users
+ */
+export interface CustomColors {
+  primary?: string; // HSL values as "H S% L%"
+  accent?: string;
+  chartPositive?: string;
+  chartNegative?: string;
+}
+
+/**
+ * User theme preferences stored in Supabase
+ */
+export interface ThemePreferences {
+  mode: ThemeMode;
+  palette: PaletteName;
+  customColors?: CustomColors | null;
+}
+
+/**
+ * Default theme preferences
+ */
+export const DEFAULT_THEME_PREFERENCES: ThemePreferences = {
+  mode: "system",
+  palette: "finance-calm",
+  customColors: null,
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -14,6 +52,7 @@ export interface Database {
           id: string;
           display_name: string | null;
           currency: string | null;
+          theme_preferences: ThemePreferences | null;
           created_at: string;
           updated_at: string;
         };
@@ -21,6 +60,7 @@ export interface Database {
           id: string;
           display_name?: string | null;
           currency?: string | null;
+          theme_preferences?: ThemePreferences | null;
           created_at?: string;
           updated_at?: string;
         };
