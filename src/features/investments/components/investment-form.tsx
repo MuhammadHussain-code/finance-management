@@ -59,7 +59,7 @@ export function InvestmentForm({
 
     const parsed = investmentSchema.safeParse(payload);
     if (!parsed.success) {
-      alert(parsed.error.errors[0]?.message ?? "Invalid investment data");
+      alert(parsed.error.issues[0]?.message ?? "Invalid investment data");
       return;
     }
     onSubmit(parsed.data);
@@ -99,7 +99,10 @@ export function InvestmentForm({
       </div>
       <div className="space-y-2">
         <Label htmlFor="investment_type">Type</Label>
-        <Select value={investmentType} onValueChange={setInvestmentType}>
+        <Select
+          value={investmentType}
+          onValueChange={(value) => setInvestmentType(value as "sip" | "lump_sum")}
+        >
           <SelectTrigger id="investment_type">
             <SelectValue placeholder="Select type" />
           </SelectTrigger>

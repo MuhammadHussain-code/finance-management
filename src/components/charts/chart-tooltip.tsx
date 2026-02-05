@@ -11,7 +11,7 @@ interface ChartTooltipProps {
     color: string;
     dataKey: string;
   }>;
-  label?: string;
+  label?: string | number;
   /** Custom label formatter */
   labelFormatter?: (label: string) => string;
   /** Custom value formatter */
@@ -36,7 +36,12 @@ export const ChartTooltip = memo(function ChartTooltip({
     return null;
   }
 
-  const formattedLabel = labelFormatter ? labelFormatter(label ?? "") : label;
+  const normalizedLabel = label ?? "";
+  const formattedLabel = labelFormatter
+    ? labelFormatter(String(normalizedLabel))
+    : label !== undefined
+      ? String(label)
+      : undefined;
 
   return (
     <div

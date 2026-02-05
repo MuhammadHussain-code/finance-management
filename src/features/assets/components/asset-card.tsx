@@ -35,7 +35,7 @@ export function AssetCard({
           <div className="text-right">
             <div className="text-muted-foreground">Current</div>
             <div className="font-medium">{formatCurrency(currentValue)}</div>
-            {returnPercentage !== null ? (
+            {returnPercentage != null ? (
               <div className={isPositive ? "text-emerald-600" : "text-rose-600"}>
                 {isPositive ? "+" : ""}
                 {returnPercentage.toFixed(2)}%

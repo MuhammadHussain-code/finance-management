@@ -1,4 +1,7 @@
-@import "tailwindcss";
+@config "../tailwind.config.cjs";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   color-scheme: light;
@@ -94,7 +97,7 @@
   }
 
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {

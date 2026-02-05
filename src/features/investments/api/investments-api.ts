@@ -1,5 +1,8 @@
 import { supabase } from "@/lib/supabase/client";
+import type { Database } from "@/lib/supabase/types";
 import type { Investment } from "@/features/investments/types";
+
+type InvestmentInsert = Database["public"]["Tables"]["investments"]["Insert"];
 
 function normalizeInvestment(row: Investment): Investment {
   return {
@@ -21,7 +24,7 @@ export async function fetchInvestments(userId: string) {
   return (data as Investment[]).map(normalizeInvestment);
 }
 
-export async function createInvestment(payload: Partial<Investment> & { user_id: string }) {
+export async function createInvestment(payload: InvestmentInsert) {
   const { data, error } = await supabase
     .from("investments")
     .insert(payload)

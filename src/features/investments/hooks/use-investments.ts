@@ -4,7 +4,9 @@ import {
   deleteInvestment,
   fetchInvestments,
 } from "@/features/investments/api/investments-api";
-import type { Investment } from "@/features/investments/types";
+import type { Database } from "@/lib/supabase/types";
+
+type InvestmentInsert = Database["public"]["Tables"]["investments"]["Insert"];
 
 export function useInvestments(userId?: string) {
   const queryClient = useQueryClient();
@@ -16,8 +18,7 @@ export function useInvestments(userId?: string) {
   });
 
   const createMutation = useMutation({
-    mutationFn: (payload: Partial<Investment> & { user_id: string }) =>
-      createInvestment(payload),
+    mutationFn: (payload: InvestmentInsert) => createInvestment(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["investments"] });
     },

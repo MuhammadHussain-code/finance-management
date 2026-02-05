@@ -49,7 +49,7 @@ export function AssetForm({
 
     const parsed = assetSchema.safeParse(payload);
     if (!parsed.success) {
-      alert(parsed.error.errors[0]?.message ?? "Invalid asset data");
+      alert(parsed.error.issues[0]?.message ?? "Invalid asset data");
       return;
     }
     onSubmit(parsed.data);

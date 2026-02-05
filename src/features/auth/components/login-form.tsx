@@ -28,7 +28,7 @@ export function LoginForm() {
 
     const parsed = authSchema.safeParse(payload);
     if (!parsed.success) {
-      setError(parsed.error.errors[0]?.message ?? "Invalid credentials");
+      setError(parsed.error.issues[0]?.message ?? "Invalid credentials");
       setIsSubmitting(false);
       return;
     }

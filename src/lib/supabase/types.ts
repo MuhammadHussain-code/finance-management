@@ -25,6 +25,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Relationships: [];
       };
       assets: {
         Row: {
@@ -50,6 +51,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["assets"]["Insert"]>;
+        Relationships: [];
       };
       investments: {
         Row: {
@@ -79,6 +81,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["investments"]["Insert"]>;
+        Relationships: [];
       };
       price_history: {
         Row: {
@@ -100,6 +103,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["price_history"]["Insert"]>;
+        Relationships: [];
       };
       asset_categories: {
         Row: {
@@ -113,6 +117,7 @@ export interface Database {
           sort_order?: number;
         };
         Update: Partial<Database["public"]["Tables"]["asset_categories"]["Insert"]>;
+        Relationships: [];
       };
     };
     Views: {};

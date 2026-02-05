@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createAsset, deleteAsset, fetchAssets, updateAsset } from "@/features/assets/api/assets-api";
-import type { Asset } from "@/features/assets/types";
+import type { Database } from "@/lib/supabase/types";
+
+type AssetInsert = Database["public"]["Tables"]["assets"]["Insert"];
+type AssetUpdate = Database["public"]["Tables"]["assets"]["Update"];
 
 export function useAssets(userId?: string) {
   const queryClient = useQueryClient();
@@ -12,14 +15,14 @@ export function useAssets(userId?: string) {
   });
 
   const createMutation = useMutation({
-    mutationFn: (payload: Partial<Asset> & { user_id: string }) => createAsset(payload),
+    mutationFn: (payload: AssetInsert) => createAsset(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["assets"] });
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: Partial<Asset> }) =>
+    mutationFn: ({ id, payload }: { id: string; payload: AssetUpdate }) =>
       updateAsset(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["assets"] });

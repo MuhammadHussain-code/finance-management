@@ -8,8 +8,14 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.ts",
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "icon.svg", "robots.txt"],
+      injectManifest: {
+        minify: false,
+      },
       manifest: {
         name: "SIP Tracker",
         short_name: "SIP Tracker",

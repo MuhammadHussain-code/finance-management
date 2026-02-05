@@ -1,5 +1,10 @@
 import { supabase } from "@/lib/supabase/client";
+import type { Database } from "@/lib/supabase/types";
 import type { Asset, AssetPrice } from "@/features/assets/types";
+
+type AssetInsert = Database["public"]["Tables"]["assets"]["Insert"];
+type AssetUpdate = Database["public"]["Tables"]["assets"]["Update"];
+type AssetPriceInsert = Database["public"]["Tables"]["price_history"]["Insert"];
 
 function normalizePrice(row: AssetPrice): AssetPrice {
   return {
@@ -25,13 +30,13 @@ export async function fetchAssetById(id: string) {
   return data as Asset;
 }
 
-export async function createAsset(payload: Partial<Asset> & { user_id: string }) {
+export async function createAsset(payload: AssetInsert) {
   const { data, error } = await supabase.from("assets").insert(payload).select("*").single();
   if (error) throw error;
   return data as Asset;
 }
 
-export async function updateAsset(id: string, payload: Partial<Asset>) {
+export async function updateAsset(id: string, payload: AssetUpdate) {
   const { data, error } = await supabase
     .from("assets")
     .update(payload)
@@ -57,13 +62,7 @@ export async function fetchAssetPrices(assetId: string) {
   return (data as AssetPrice[]).map(normalizePrice);
 }
 
-export async function createAssetPrice(payload: {
-  asset_id: string;
-  user_id: string;
-  price: number;
-  price_date: string;
-  source?: string;
-}) {
+export async function createAssetPrice(payload: AssetPriceInsert) {
   const { data, error } = await supabase
     .from("price_history")
     .insert(payload)

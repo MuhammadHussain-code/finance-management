@@ -30,7 +30,7 @@ export function PriceUpdateForm({
 
     const parsed = priceSchema.safeParse(payload);
     if (!parsed.success) {
-      alert(parsed.error.errors[0]?.message ?? "Invalid price");
+      alert(parsed.error.issues[0]?.message ?? "Invalid price");
       return;
     }
     onSubmit(parsed.data);
