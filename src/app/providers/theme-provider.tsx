@@ -8,11 +8,9 @@ import type {
 import { DEFAULT_THEME_PREFERENCES } from "@/lib/supabase/types";
 import {
   ThemeContext,
-  THEME_STORAGE_KEY,
   resolveThemeMode,
   loadThemeFromStorage,
   saveThemeToStorage,
-  getSystemPreference,
 } from "@/features/settings/hooks/use-theme";
 import {
   fetchThemePreferences,
