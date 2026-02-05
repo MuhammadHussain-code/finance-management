@@ -74,6 +74,7 @@ export interface Database {
           name: string;
           category_id: string;
           symbol: string | null;
+          currency: string;
           notes: string | null;
           is_active: boolean;
           created_at: string;
@@ -85,6 +86,7 @@ export interface Database {
           name: string;
           category_id: string;
           symbol?: string | null;
+          currency?: string;
           notes?: string | null;
           is_active?: boolean;
           created_at?: string;

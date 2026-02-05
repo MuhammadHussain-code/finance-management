@@ -11,6 +11,7 @@ const assetSchema = z.object({
   name: z.string().min(2, "Asset name is required"),
   category_id: z.string().min(1, "Category is required"),
   symbol: z.string().optional(),
+  currency: z.string().trim().min(1, "Currency is required").max(5, "Currency must be 5 characters or less"),
   notes: z.string().optional(),
 });
 
@@ -44,6 +45,7 @@ export function AssetForm({
       name: String(form.get("name") ?? "").trim(),
       category_id: categoryId,
       symbol: String(form.get("symbol") ?? "").trim() || undefined,
+      currency: String(form.get("currency") ?? "").trim() || "Rs",
       notes: String(form.get("notes") ?? "").trim() || undefined,
     };
 
@@ -80,6 +82,18 @@ export function AssetForm({
       <div className="space-y-2">
         <Label htmlFor="symbol">Symbol (optional)</Label>
         <Input id="symbol" name="symbol" defaultValue={defaultValues?.symbol} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="currency">Currency</Label>
+        <Input
+          id="currency"
+          name="currency"
+          maxLength={5}
+          defaultValue={defaultValues?.currency ?? "Rs"}
+          placeholder="Rs"
+          required
+        />
+        <p className="text-xs text-muted-foreground">Symbol or up to 5 letters.</p>
       </div>
       <div className="space-y-2">
         <Label htmlFor="notes">Notes (optional)</Label>

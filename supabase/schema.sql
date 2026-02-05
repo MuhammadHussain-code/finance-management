@@ -39,6 +39,7 @@ create table public.assets (
   name text not null,
   category_id text references public.asset_categories(id) not null,
   symbol text,
+  currency text not null default 'Rs',
   notes text,
   is_active boolean default true,
   created_at timestamptz default now(),

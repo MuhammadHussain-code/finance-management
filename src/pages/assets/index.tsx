@@ -49,7 +49,13 @@ export function AssetsPage() {
 
   const assets = assetsQuery.data ?? [];
 
-  const handleCreate = (values: { name: string; category_id: string; symbol?: string; notes?: string }) => {
+  const handleCreate = (values: {
+    name: string;
+    category_id: string;
+    symbol?: string;
+    currency: string;
+    notes?: string;
+  }) => {
     if (!user) return;
     assetsQuery.createAsset.mutate(
       {
@@ -57,6 +63,7 @@ export function AssetsPage() {
         name: values.name,
         category_id: values.category_id,
         symbol: values.symbol ?? null,
+        currency: values.currency,
         notes: values.notes ?? null,
       },
       {

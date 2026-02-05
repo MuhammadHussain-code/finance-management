@@ -92,6 +92,7 @@ export function AssetDetailPage() {
     name: string;
     category_id: string;
     symbol?: string;
+    currency: string;
     notes?: string;
   }) => {
     if (!id) return;
@@ -102,6 +103,7 @@ export function AssetDetailPage() {
           name: values.name,
           category_id: values.category_id,
           symbol: values.symbol ?? null,
+          currency: values.currency,
           notes: values.notes ?? null,
         },
       },
@@ -132,7 +134,7 @@ export function AssetDetailPage() {
           <div>
             <h1 className="text-2xl font-semibold">{assetQuery.data.name}</h1>
             <p className="text-sm text-muted-foreground">
-              {assetQuery.data.category_id.replace("_", " ")}
+              {assetQuery.data.category_id.replace("_", " ")} · {assetQuery.data.currency}
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -164,6 +166,7 @@ export function AssetDetailPage() {
                     name: assetQuery.data.name,
                     category_id: assetQuery.data.category_id,
                     symbol: assetQuery.data.symbol ?? undefined,
+                    currency: assetQuery.data.currency,
                     notes: assetQuery.data.notes ?? undefined,
                   }}
                   onSubmit={handleAssetUpdate}
@@ -180,7 +183,7 @@ export function AssetDetailPage() {
         <div className="mt-4 text-sm text-muted-foreground">
           Current price:{" "}
           <span className="font-medium text-foreground">
-            {latestPrice ? formatCurrency(latestPrice) : "Not set"}
+            {latestPrice ? formatCurrency(latestPrice, assetQuery.data.currency) : "Not set"}
           </span>
           {latestPriceDate ? ` · Updated ${formatShortDate(latestPriceDate)}` : null}
         </div>
@@ -195,7 +198,7 @@ export function AssetDetailPage() {
             <div>
               <div className="text-muted-foreground">Total invested</div>
               <div className="text-lg font-semibold">
-                <CurrencyDisplay value={totalInvested} />
+                <CurrencyDisplay value={totalInvested} currency={assetQuery.data.currency} />
               </div>
             </div>
             <div>
@@ -232,7 +235,7 @@ export function AssetDetailPage() {
                   pnl === null ? "" : pnl >= 0 ? "text-positive" : "text-negative"
                 }`}
               >
-                {pnl === null ? "—" : <CurrencyDisplay value={pnl} />}
+                {pnl === null ? "—" : <CurrencyDisplay value={pnl} currency={assetQuery.data.currency} />}
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -248,7 +251,7 @@ export function AssetDetailPage() {
       {assetInvestments.length ? (
         <div className="space-y-3">
           <h2 className="text-lg font-semibold">SIP history</h2>
-          <MonthlyBreakdown investments={assetInvestments} />
+          <MonthlyBreakdown investments={assetInvestments} currency={assetQuery.data.currency} />
         </div>
       ) : (
         <div className="rounded-xl border border-dashed bg-background p-6 text-sm text-muted-foreground">

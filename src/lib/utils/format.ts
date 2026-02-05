@@ -1,13 +1,28 @@
 export function formatCurrency(
   value: number,
-  currency: string = "INR",
+  currency?: string | null,
   locale: string = "en-IN",
 ) {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 2,
-  }).format(value);
+  const normalizedCurrency = (currency ?? "INR").trim();
+  if (!normalizedCurrency) {
+    return new Intl.NumberFormat(locale, {
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: normalizedCurrency,
+      maximumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    const needsSpace = /[A-Za-z]$/.test(normalizedCurrency);
+    const prefix = normalizedCurrency + (needsSpace ? " " : "");
+    const absFormatted = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(Math.abs(value));
+    const sign = value < 0 ? "-" : "";
+    return `${sign}${prefix}${absFormatted}`;
+  }
 }
 
 export function formatNumber(value: number, maximumFractionDigits = 2) {

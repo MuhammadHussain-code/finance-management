@@ -25,7 +25,9 @@ export function RecentInvestments({ investments, assetsById }: RecentInvestments
               {formatShortDate(investment.investment_date)}
             </div>
           </div>
-          <div className="font-semibold">{formatCurrency(investment.amount)}</div>
+          <div className="font-semibold">
+            {formatCurrency(investment.amount, assetsById[investment.asset_id]?.currency)}
+          </div>
         </div>
       ))}
     </div>

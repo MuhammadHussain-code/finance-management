@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils/cn";
 
 interface CurrencyDisplayProps {
   value: number;
-  currency?: string;
+  currency?: string | null;
   className?: string;
 }
 

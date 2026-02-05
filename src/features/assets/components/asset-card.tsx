@@ -27,7 +27,9 @@ export function AssetCard({
         <CardContent className="flex items-center justify-between text-sm">
           <div>
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Invested</div>
-            <div className="font-semibold text-foreground">{formatCurrency(totalInvested)}</div>
+            <div className="font-semibold text-foreground">
+              {formatCurrency(totalInvested, asset.currency)}
+            </div>
           </div>
           <div className="text-right">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Units</div>

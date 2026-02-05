@@ -4,9 +4,10 @@ import type { Investment } from "@/features/investments/types";
 
 interface MonthlyBreakdownProps {
   investments: Investment[];
+  currency?: string;
 }
 
-export function MonthlyBreakdown({ investments }: MonthlyBreakdownProps) {
+export function MonthlyBreakdown({ investments, currency }: MonthlyBreakdownProps) {
   const grouped = investments.reduce<Record<string, Investment[]>>((acc, investment) => {
     const date = new Date(investment.investment_date);
     const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
@@ -25,7 +26,7 @@ export function MonthlyBreakdown({ investments }: MonthlyBreakdownProps) {
             {items.map((item) => (
               <div key={item.id} className="flex items-center justify-between text-sm">
                 <span>{item.investment_type === "sip" ? "SIP" : "Lump Sum"}</span>
-                <span className="font-medium">{formatCurrency(item.amount)}</span>
+                <span className="font-medium">{formatCurrency(item.amount, currency)}</span>
               </div>
             ))}
           </div>

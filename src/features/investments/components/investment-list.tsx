@@ -29,7 +29,7 @@ export function InvestmentList({ investments, assetsById, onDelete }: Investment
           </div>
           <div className="text-right">
             <div className="text-sm font-semibold">
-              {formatCurrency(investment.amount)}
+              {formatCurrency(investment.amount, assetsById[investment.asset_id]?.currency)}
             </div>
             {investment.units ? (
               <div className="text-xs text-muted-foreground">
