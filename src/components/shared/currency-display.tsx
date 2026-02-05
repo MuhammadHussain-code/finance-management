@@ -1,4 +1,5 @@
 import { formatCurrency } from "@/lib/utils/format";
+import { cn } from "@/lib/utils/cn";
 
 interface CurrencyDisplayProps {
   value: number;
@@ -7,5 +8,5 @@ interface CurrencyDisplayProps {
 }
 
 export function CurrencyDisplay({ value, currency, className }: CurrencyDisplayProps) {
-  return <span className={className}>{formatCurrency(value, currency)}</span>;
+  return <span className={cn("tabular-nums", className)}>{formatCurrency(value, currency)}</span>;
 }
