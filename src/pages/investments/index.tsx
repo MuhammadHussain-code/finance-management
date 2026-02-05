@@ -6,6 +6,7 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useAssets } from "@/features/assets/hooks/use-assets";
 import { useInvestments } from "@/features/investments/hooks/use-investments";
 import { InvestmentList } from "@/features/investments/components/investment-list";
+import { toast } from "@/components/ui/toast";
 
 export function InvestmentsPage() {
   const navigate = useNavigate();
@@ -45,7 +46,11 @@ export function InvestmentsPage() {
           assetsById={assetsById}
           onDelete={(id) => {
             if (!confirm("Delete this investment entry?")) return;
-            investmentsQuery.deleteInvestment.mutate(id);
+            investmentsQuery.deleteInvestment.mutate(id, {
+              onSuccess: () => {
+                toast.success("Investment deleted", "The entry has been removed.");
+              },
+            });
           }}
         />
       ) : (

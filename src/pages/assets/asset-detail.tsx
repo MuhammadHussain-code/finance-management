@@ -22,6 +22,7 @@ import { formatCurrency } from "@/lib/utils/format";
 import { formatShortDate } from "@/lib/utils/date";
 import { AssetForm } from "@/features/assets/components/asset-form";
 import { useAssets } from "@/features/assets/hooks/use-assets";
+import { toast } from "@/components/ui/toast";
 
 export function AssetDetailPage() {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ export function AssetDetailPage() {
       {
         onSuccess: () => {
           setIsPriceDialogOpen(false);
+          toast.success("Price updated", "Latest price has been saved.");
         },
       }
     );
@@ -93,6 +95,7 @@ export function AssetDetailPage() {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["asset", id] });
+          toast.success("Asset updated", "Your changes have been saved.");
         },
       },
     );
@@ -102,7 +105,10 @@ export function AssetDetailPage() {
     if (!id) return;
     if (!confirm("Delete this asset and its related investments?")) return;
     assetsMutation.deleteAsset.mutate(id, {
-      onSuccess: () => navigate("/assets"),
+      onSuccess: () => {
+        toast.success("Asset deleted", "All related investments were removed.");
+        navigate("/assets");
+      },
     });
   };
 

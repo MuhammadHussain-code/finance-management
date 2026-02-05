@@ -10,7 +10,7 @@ const MAX_DURATION_MONTHS = 600;
 /** Minimum duration */
 const MIN_DURATION_MONTHS = 1;
 /** Maximum annual return: 50% */
-const MAX_ANNUAL_RETURN_PERCENT = 50;
+const MAX_ANNUAL_RETURN_PERCENT = 5000;
 /** Minimum annual return */
 const MIN_ANNUAL_RETURN_PERCENT = 0;
 
