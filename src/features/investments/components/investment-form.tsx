@@ -46,15 +46,37 @@ export function InvestmentForm({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
+    const amount = Number(form.get("amount"));
+    const parsedUnits = form.get("units") ? Number(form.get("units")) : undefined;
+    const parsedPricePerUnit = form.get("price_per_unit")
+      ? Number(form.get("price_per_unit"))
+      : undefined;
+    let resolvedUnits = parsedUnits;
+    let resolvedPricePerUnit = parsedPricePerUnit;
+
+    if (
+      resolvedUnits === undefined &&
+      resolvedPricePerUnit !== undefined &&
+      resolvedPricePerUnit > 0
+    ) {
+      resolvedUnits = amount / resolvedPricePerUnit;
+    }
+
+    if (
+      resolvedPricePerUnit === undefined &&
+      resolvedUnits !== undefined &&
+      resolvedUnits > 0
+    ) {
+      resolvedPricePerUnit = amount / resolvedUnits;
+    }
+
     const payload = {
       asset_id: assetId,
-      amount: Number(form.get("amount")),
+      amount,
       investment_date: String(form.get("investment_date") ?? ""),
       investment_type: investmentType as "sip" | "lump_sum",
-      units: form.get("units") ? Number(form.get("units")) : undefined,
-      price_per_unit: form.get("price_per_unit")
-        ? Number(form.get("price_per_unit"))
-        : undefined,
+      units: resolvedUnits,
+      price_per_unit: resolvedPricePerUnit,
     };
 
     const parsed = investmentSchema.safeParse(payload);

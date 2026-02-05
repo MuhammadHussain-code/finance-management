@@ -1,5 +1,6 @@
 import type { Investment } from "@/features/investments/types";
 import type { Asset } from "@/features/assets/types";
+import { getInvestmentUnits } from "@/features/calculations/lib/investment-units";
 
 /**
  * Chart color tokens - matches CSS variables for consistency
@@ -76,7 +77,10 @@ export function calculatePortfolioGrowthData(
 
     existing.invested += inv.amount;
     const currentUnits = existing.unitsByAsset.get(inv.asset_id) ?? 0;
-    existing.unitsByAsset.set(inv.asset_id, currentUnits + (inv.units ?? 0));
+    existing.unitsByAsset.set(
+      inv.asset_id,
+      currentUnits + getInvestmentUnits(inv),
+    );
     monthlyInvestments.set(month, existing);
   }
 
@@ -253,7 +257,7 @@ export function calculateAssetAllocationData(
   for (const asset of assets) {
     const assetInvestments = investmentsByAsset[asset.id] ?? [];
     const totalUnits = assetInvestments.reduce(
-      (sum, inv) => sum + (inv.units ?? 0),
+      (sum, inv) => sum + getInvestmentUnits(inv),
       0,
     );
     const latestPrice = latestPrices[asset.id]?.price ?? 0;

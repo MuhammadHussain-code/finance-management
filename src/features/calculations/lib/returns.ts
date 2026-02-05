@@ -1,4 +1,5 @@
 import type { Investment } from "@/features/investments/types";
+import { getTotalUnits } from "@/features/calculations/lib/investment-units";
 
 export interface ReturnMetrics {
   totalInvested: number;
@@ -13,14 +14,14 @@ export function calculateReturnMetrics(
   latestPrice?: number,
 ): ReturnMetrics {
   const totalInvested = investments.reduce((sum, item) => sum + item.amount, 0);
-  const totalUnits = investments.reduce(
-    (sum, item) => sum + (item.units ?? 0),
-    0,
-  );
-  const currentValue = latestPrice ? totalUnits * latestPrice : 0;
-  const absoluteReturn = currentValue - totalInvested;
+  const totalUnits = getTotalUnits(investments);
+  const hasLatestPrice =
+    typeof latestPrice === "number" && Number.isFinite(latestPrice) && latestPrice > 0;
+  const hasValuation = hasLatestPrice && totalUnits > 0;
+  const currentValue = hasValuation ? totalUnits * latestPrice : 0;
+  const absoluteReturn = hasValuation ? currentValue - totalInvested : 0;
   const returnPercentage =
-    totalInvested > 0 ? (absoluteReturn / totalInvested) * 100 : null;
+    hasValuation && totalInvested > 0 ? (absoluteReturn / totalInvested) * 100 : null;
 
   return {
     totalInvested,

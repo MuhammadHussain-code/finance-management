@@ -10,6 +10,7 @@ import { useAssets } from "@/features/assets/hooks/use-assets";
 import { useLatestPrices } from "@/features/assets/hooks/use-asset-prices";
 import { useInvestments } from "@/features/investments/hooks/use-investments";
 import { calculateReturnMetrics } from "@/features/calculations/lib/returns";
+import { toast } from "@/components/ui/toast";
 
 export function AssetsPage() {
   const { user } = useAuth();
@@ -66,7 +67,10 @@ export function AssetsPage() {
         notes: values.notes ?? null,
       },
       {
-        onSuccess: () => setIsDialogOpen(false),
+        onSuccess: () => {
+          setIsDialogOpen(false);
+          toast.success("Asset created", "You can now add investments and prices.");
+        },
       },
     );
   };

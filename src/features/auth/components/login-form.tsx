@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/toast";
 
 const authSchema = z.object({
   email: z.string().email(),
@@ -40,6 +41,14 @@ export function LoginForm() {
 
     if (authError) {
       setError(authError.message);
+      toast.error("Authentication failed", authError.message);
+    } else if (isRegistering) {
+      toast.success(
+        "Account created",
+        "Check your email to confirm your account before signing in.",
+      );
+    } else {
+      toast.success("Welcome back", "You are now signed in.");
     }
     setIsSubmitting(false);
   };

@@ -5,6 +5,7 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useAssets } from "@/features/assets/hooks/use-assets";
 import { useInvestments } from "@/features/investments/hooks/use-investments";
 import { InvestmentForm } from "@/features/investments/components/investment-form";
+import { toast } from "@/components/ui/toast";
 
 export function NewInvestmentPage() {
   const navigate = useNavigate();
@@ -27,6 +28,11 @@ export function NewInvestmentPage() {
     price_per_unit?: number;
   }) => {
     if (!user) return;
+    const derivedUnits =
+      values.units ??
+      (values.price_per_unit && values.price_per_unit > 0
+        ? values.amount / values.price_per_unit
+        : null);
     investmentsQuery.createInvestment.mutate(
       {
         user_id: user.id,
@@ -34,11 +40,14 @@ export function NewInvestmentPage() {
         amount: values.amount,
         investment_date: values.investment_date,
         investment_type: values.investment_type,
-        units: values.units ?? null,
+        units: derivedUnits,
         price_per_unit: values.price_per_unit ?? null,
       },
       {
-        onSuccess: () => navigate("/investments"),
+        onSuccess: () => {
+          toast.success("Investment saved", "Your entry has been added.");
+          navigate("/investments");
+        },
       },
     );
   };
