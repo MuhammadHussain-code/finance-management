@@ -8,7 +8,6 @@ interface PortfolioSummaryProps {
 
 export function PortfolioSummary({
   totalInvested,
-  totalUnits,
 }: PortfolioSummaryProps) {
   return (
     <Card className="bg-linear-to-br from-card via-card to-primary/5 border-primary/20">
