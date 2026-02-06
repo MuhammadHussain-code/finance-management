@@ -23,12 +23,12 @@ export function PortfolioSummary({
             <CurrencyDisplay value={totalInvested} />
           </div>
         </div>
-        <div className="space-y-1">
+        {/* <div className="space-y-1">
           <div className="text-xs uppercase tracking-wider text-muted-foreground">Total units</div>
           <div className="text-2xl font-bold tracking-tight text-primary">
             {formatNumber(totalUnits, 4)}
           </div>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );
