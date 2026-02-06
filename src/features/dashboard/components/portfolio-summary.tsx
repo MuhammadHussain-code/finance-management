@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrencyDisplay } from "@/components/shared/currency-display";
-import { formatNumber } from "@/lib/utils/format";
 
 interface PortfolioSummaryProps {
   totalInvested: number;
