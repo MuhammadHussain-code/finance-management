@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { useAuth } from "@/features/auth/hooks/use-auth";
@@ -9,6 +9,7 @@ import { toast } from "@/components/ui/toast";
 
 export function NewInvestmentPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const assetsQuery = useAssets(user?.id);
   const investmentsQuery = useInvestments(user?.id);
@@ -18,6 +19,15 @@ export function NewInvestmentPage() {
   }
 
   const assets = assetsQuery.data ?? [];
+  const assetIdParam = searchParams.get("assetId");
+  const returnToParam = searchParams.get("returnTo");
+  const resolvedAssetId = assets.some((asset) => asset.id === assetIdParam)
+    ? assetIdParam ?? undefined
+    : undefined;
+  const safeReturnTo =
+    returnToParam && returnToParam.startsWith("/") && !returnToParam.startsWith("//")
+      ? returnToParam
+      : null;
 
   const handleSubmit = (values: {
     asset_id: string;
@@ -46,7 +56,7 @@ export function NewInvestmentPage() {
       {
         onSuccess: () => {
           toast.success("Investment saved", "Your entry has been added.");
-          navigate("/investments");
+          navigate(safeReturnTo ?? "/investments");
         },
       },
     );
@@ -62,6 +72,7 @@ export function NewInvestmentPage() {
           {assets.length ? (
             <InvestmentForm
               assets={assets}
+              defaultValues={resolvedAssetId ? { asset_id: resolvedAssetId } : undefined}
               onSubmit={handleSubmit}
               isSubmitting={investmentsQuery.createInvestment.isPending}
             />

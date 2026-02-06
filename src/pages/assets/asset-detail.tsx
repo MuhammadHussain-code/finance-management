@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { MonthlyBreakdown } from "@/features/investments/components/monthly-breakdown";
+import { InvestmentList } from "@/features/investments/components/investment-list";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useInvestments } from "@/features/investments/hooks/use-investments";
 import { useAssetPrices } from "@/features/assets/hooks/use-asset-prices";
@@ -69,6 +70,11 @@ export function AssetDetailPage() {
     return <div className="text-sm text-muted-foreground">Asset not found.</div>;
   }
 
+  const addInvestmentHref = id
+    ? `/investments/new?assetId=${id}&returnTo=/assets/${id}`
+    : "/investments/new";
+  const assetsById = { [assetQuery.data.id]: assetQuery.data };
+
   const handlePriceSubmit = (values: { price: number; price_date: string }) => {
     if (!user || !id) return;
     pricesQuery.createPrice.mutate(
@@ -123,6 +129,15 @@ export function AssetDetailPage() {
       onSuccess: () => {
         toast.success("Asset deleted", "All related investments were removed.");
         navigate("/assets");
+      },
+    });
+  };
+
+  const handleInvestmentDelete = (investmentId: string) => {
+    if (!confirm("Delete this investment entry?")) return;
+    investmentsQuery.deleteInvestment.mutate(investmentId, {
+      onSuccess: () => {
+        toast.success("Investment deleted", "The entry has been removed.");
       },
     });
   };
@@ -248,10 +263,32 @@ export function AssetDetailPage() {
         </Card>
       </div>
 
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-semibold">Investments</h2>
+          <p className="text-sm text-muted-foreground">
+            Track SIP and lump-sum entries for this asset.
+          </p>
+        </div>
+        <Button asChild>
+          <Link to={addInvestmentHref}>Add investment</Link>
+        </Button>
+      </div>
+
       {assetInvestments.length ? (
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold">SIP history</h2>
-          <MonthlyBreakdown investments={assetInvestments} currency={assetQuery.data.currency} />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold">Monthly breakdown</h3>
+            <MonthlyBreakdown investments={assetInvestments} currency={assetQuery.data.currency} />
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold">Entries</h3>
+            <InvestmentList
+              investments={assetInvestments}
+              assetsById={assetsById}
+              onDelete={handleInvestmentDelete}
+            />
+          </div>
         </div>
       ) : (
         <div className="rounded-xl border border-dashed bg-background p-6 text-sm text-muted-foreground">
